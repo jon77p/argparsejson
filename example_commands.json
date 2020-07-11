@@ -1,0 +1,20 @@
+[        
+  {
+    "name":     "subcommand",
+    "abbrev":   "sc",
+    "args": [
+      {
+        "name": "--opt",
+        "abbrev": "-o"
+      },
+      {
+        "name": "param",
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "name":     "subcommand2",
+    "abbrev":   "sc2"
+  }
+]
