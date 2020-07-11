@@ -3,7 +3,7 @@ import copy
 import json
 import os
 
-VALID_ARGUMENT_KWARGS = ["name", "abbrev", "action", "nargs", "const", "default", "type", "choices", "required", "help", "metavar", "dest"]
+VALID_ARGUMENT_KWARGS = ["name", "abbrev", "action", "nargs", "const", "default", "type", "choices", "required", "help", "metavar", "dest", "mutually_exclusive_group"]
 
 def getType(s:str):
     if s is None:
@@ -35,6 +35,26 @@ class MyArgParser(argparse.ArgumentParser):
             if self.add_help:
                 super().exit(status=status, message=message)
 
+def _parse_kwargs(parser, kwargs:dict):
+    abbrev = kwargs.pop('abbrev') if kwargs.get('abbrev') is not None else None
+    name = kwargs.pop('name') if kwargs.get('name') is not None else None
+
+    if kwargs.get('type') is not None:
+        kwargs['type'] = getType(kwargs.get('type'))
+
+    if kwargs.get("action") == "store_true":
+        if kwargs.get("type") is not None:
+            del kwargs["type"]
+        if kwargs.get("default") is not None:
+            del kwargs["default"]
+
+    if abbrev is None:
+        args = [name]
+    else:
+        args = [abbrev, name]
+
+    parser.add_argument(*args, **kwargs)
+
 def _parse_args(parser, commands:dict):
     for arg in commands.get('args', []):
         kwargs = copy.deepcopy(arg)
@@ -42,24 +62,12 @@ def _parse_args(parser, commands:dict):
             if k not in VALID_ARGUMENT_KWARGS:
                 raise ValueError("'{}' is an unexpected keyword argument for argparse".format(k))
 
-        abbrev = kwargs.pop('abbrev') if kwargs.get('abbrev') is not None else None
-        name = kwargs.pop('name') if kwargs.get('name') is not None else None
+        if kwargs.get("mutually_exclusive_group") is not None:
+            mutually_exclusive_parser = parser.add_mutually_exclusive_group(required=kwargs["mutually_exclusive_group"].get("required"))
 
-        if kwargs.get('type') is not None:
-            kwargs['type'] = getType(kwargs.get('type'))
-
-        if kwargs.get("action") == "store_true":
-            if kwargs.get("type") is not None:
-                del kwargs["type"]
-            if kwargs.get("default") is not None:
-                del kwargs["default"]
-
-        if abbrev is None:
-            args = [name]
+            _parse_args(mutually_exclusive_parser, kwargs["mutually_exclusive_group"])
         else:
-            args = [abbrev, name]
-
-        parser.add_argument(*args, **kwargs)
+            _parse_kwargs(parser, kwargs)
 
 def _parse_subparsers(parser, commands:dict):
     if len(commands.get("subparsers", [])) > 0:

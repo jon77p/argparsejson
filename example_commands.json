@@ -52,6 +52,29 @@
           "help": "a nested subparser"
         }
       ]
+    },
+    {
+      "name": "subcommand3",
+      "abbrev": "sc3",
+      "help": "a third subcommand",
+      "args": [
+        {
+          "mutually_exclusive_group": {
+            "args": [
+              {
+                "name": "--opt1",
+                "help": "first optional param",
+                "action": "store_true"
+              },
+              {
+                "name": "--opt2",
+                "help": "second optional param",
+                "action": "store_true"
+              }
+            ]
+          }
+        }
+      ]
     }
   ]
 }
