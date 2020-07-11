@@ -3,6 +3,8 @@ import copy
 import json
 import os
 
+VALID_ARGUMENT_KWARGS = ["name", "abbrev", "action", "nargs", "const", "default", "type", "choices", "required", "help", "metavar", "dest"]
+
 def getType(s:str):
     if s is None:
         return
@@ -33,50 +35,61 @@ class MyArgParser(argparse.ArgumentParser):
             if self.add_help:
                 super().exit(status=status, message=message)
 
-def parse_arguments(commands_file, isClient=False, allowJson=False, prog=None, add_help=True):
+def _parse_args(parser, commands:dict):
+    for arg in commands.get('args', []):
+        kwargs = copy.deepcopy(arg)
+        for k in kwargs.keys():
+            if k not in VALID_ARGUMENT_KWARGS:
+                raise ValueError("'{}' is an unexpected keyword argument for argparse".format(k))
+
+        abbrev = kwargs.pop('abbrev') if kwargs.get('abbrev') is not None else None
+        name = kwargs.pop('name') if kwargs.get('name') is not None else None
+
+        if kwargs.get('type') is not None:
+            kwargs['type'] = getType(kwargs.get('type'))
+
+        if kwargs.get("action") == "store_true":
+            if kwargs.get("type") is not None:
+                del kwargs["type"]
+            if kwargs.get("default") is not None:
+                del kwargs["default"]
+
+        if abbrev is None:
+            args = [name]
+        else:
+            args = [abbrev, name]
+
+        parser.add_argument(*args, **kwargs)
+
+def _parse_subparsers(parser, commands:dict):
+    if len(commands.get("subparsers", [])) > 0:
+        if commands.get("subparser_params") is not None:
+            kwargs = copy.deepcopy(commands.get("subparser_params"))
+            subparsers = parser.add_subparsers(**kwargs)
+        else:
+            subparsers = parser.add_subparsers()
+
+        for sbp in commands["subparsers"]:
+            aliases = [sbp.get('abbrev')] if sbp.get('abbrev') is not None else []
+            sub_parser = subparsers.add_parser(sbp.get('name'), aliases=aliases, add_help=True)
+
+            _parse_subparsers(sub_parser, sbp)
+
+            _parse_args(sub_parser, sbp)
+
+def parse_arguments(commands_file, prog=None, add_help=True):
+    if isinstance(commands_file, str):
+        commands = json.load(open(os.path.abspath(commands_file), "r"))
+    elif isinstance(commands_file, dict):
+        commands = commands_file
+    else:
+        raise TypeError("Expected either parameter of type '{}' or '{}' for parameter '{}', but instead received type '{}'".format(str, dict, "commands_file", type(commands_file)))
+
+
     parser = MyArgParser(prog=prog, add_help=add_help)
 
-    if not isClient:
-        parser.add_argument("--debug", action='store_true')
+    _parse_args(parser, commands)
 
-        parser.add_argument("-i", action='store_true')
-
-    if allowJson:
-        parser.add_argument("--json", action='store_true', default=False)
-
-    subparsers = parser.add_subparsers(dest="action")
-    help_parser = subparsers.add_parser("help", help="show this help message")
-    usage_parser = subparsers.add_parser("usage", help="show this usage message")
-
-    implemented = json.load(open(os.path.abspath(commands_file), "r"))
-
-    for cmd in implemented:
-        aliases = [cmd.get('abbrev')] if cmd.get('abbrev') is not None else []
-        sub_parser = subparsers.add_parser(cmd.get('name'), aliases=aliases, add_help=True)
-
-        for a in cmd.get('args', []):
-            kwargs = copy.deepcopy(a)
-            for k in kwargs.keys():
-                if k not in ["name", "abbrev", "action", "nargs", "const", "default", "type", "choices", "required", "help", "metavar", "dest"]:
-                    raise ValueError("'{}' is an unexpected keyword argument for argparse".format(k))
-
-            abbrev = kwargs.pop('abbrev') if kwargs.get('abbrev') is not None else None
-            name = kwargs.pop('name') if kwargs.get('name') is not None else None
-
-            if kwargs.get('type') is not None:
-                kwargs['type'] = getType(kwargs.get('type'))
-
-            if kwargs.get("action") == "store_true":
-                if kwargs.get("type") is not None:
-                    del kwargs["type"]
-                if kwargs.get("default") is not None:
-                    del kwargs["default"]
-
-            if abbrev is None:
-                args = [name]
-            else:
-                args = [abbrev, name]
-
-            sub_parser.add_argument(*args, **kwargs)
+    _parse_subparsers(parser, commands)
 
     return parser

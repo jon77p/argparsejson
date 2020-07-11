@@ -1,20 +1,57 @@
-[        
-  {
-    "name":     "subcommand",
-    "abbrev":   "sc",
-    "args": [
-      {
-        "name": "--opt",
-        "abbrev": "-o"
-      },
-      {
-        "name": "param",
-        "type": "string"
-      }
-    ]
+{
+  "args": [
+    {
+      "name": "--verbose",
+      "abbrev": "-v",
+      "help": "print verbose output",
+      "action": "store_true"
+    },
+    {
+      "name": "-i",
+      "action": "store_true"
+    }
+  ],
+  "subparser_params": {
+    "title": "example subparser group",
+    "help": "some helpful text",
+    "dest": "action",
+    "required": true
   },
-  {
-    "name":     "subcommand2",
-    "abbrev":   "sc2"
-  }
-]
+  "subparsers": [
+    {
+      "name": "subcommand",
+      "abbrev": "sc",
+      "help": "the first subcommand",
+      "args": [
+        {
+          "name": "--opt",
+          "abbrev": "-o",
+          "help": "an optional argument"
+        },
+        {
+          "name": "param",
+          "type": "string",
+          "help": "a required parameter"
+        }
+      ]
+    },
+    {
+      "name": "subcommand2",
+      "abbrev": "sc2",
+      "help": "the second subcommand",
+      "args": [
+        {
+          "name": "param",
+          "type": "string",
+          "help": "a required parameter"
+        }
+      ],
+      "subparsers": [
+        {
+          "name": "nested2",
+          "help": "a nested subparser"
+        }
+      ]
+    }
+  ]
+}
