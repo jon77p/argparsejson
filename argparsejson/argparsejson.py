@@ -2,8 +2,12 @@ import argparse
 import copy
 import json
 import os
+from jsonschema import validate
 
 VALID_ARGUMENT_KWARGS = ["name", "abbrev", "action", "nargs", "const", "default", "type", "choices", "required", "help", "metavar", "dest", "mutually_exclusive_group"]
+
+ARGPARSEJSON_DIR = os.path.abspath(os.path.dirname(__file__))
+SCHEMA = json.load(open(os.path.join(ARGPARSEJSON_DIR, "schema.json"), "r"))
 
 def getType(s:str):
     if s is None:
@@ -93,6 +97,7 @@ def parse_arguments(commands_file, prog=None, add_help=True):
     else:
         raise TypeError("Expected either parameter of type '{}' or '{}' for parameter '{}', but instead received type '{}'".format(str, dict, "commands_file", type(commands_file)))
 
+    validate(instance=commands, schema=SCHEMA)
 
     parser = MyArgParser(prog=prog, add_help=add_help)
 

@@ -1,0 +1,136 @@
+{
+  "$id": "https://github.com/jon77p/argparsejson/schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "The command syntax schema for the argparsejson package",
+  "properties": {
+    "args": { "$ref": "#/definitions/arguments" },
+    "subparser_params": { "$ref": "#/definitions/subparser_params" },
+    "subparsers": { "$ref": "#/definitions/subparsers" }
+  },
+  "definitions": {
+    "parser": {
+      "type": "object",
+      "required": [ "name" ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "test"
+        },
+        "args": { "$ref": "#/definitions/arguments" },
+        "subparser_params": { "$ref": "#/definitions/subparser_params" },
+        "subparsers": { "$ref": "#/definitions/subparsers" }
+      }
+    },
+    "argument": {
+      "type": "object",
+      "required": [ "name" ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "test"
+        },
+        "abbrev": {
+          "type": "string",
+          "description": "An abbreviated-form of the argument."
+        },
+        "action": {
+          "type": "string",
+          "enum": ["store", "store_const", "store_true", "store_false", "append", "append_const", "count", "help", "version", "extend"],
+          "description": "test"
+        },
+        "nargs": {
+          "type": "string",
+          "description": "test"
+        },
+        "const": {
+          "type": "string",
+          "description": "test"
+        },
+        "def": {
+          "type": "string",
+          "description": "test, replace with default"
+        },
+        "type": {
+          "type": "string",
+          "description": "test"
+        },
+        "choices": {
+          "type": "string",
+          "description": "test"
+        },
+        "required": {
+          "type": "boolean",
+          "description": "test"
+        },
+        "help": {
+          "type": "string",
+          "description": "The argument's help message."
+        },
+        "metavar": {
+          "type": "string",
+          "description": "test"
+        },
+        "dest": {
+          "type": "string",
+          "description": "test"
+        }
+      }
+    },
+    "subparser_params": {
+      "type": "object",
+      "description": "test",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "A descriptive title for the group of subparsers."
+        },
+        "help": {
+          "type": "string",
+          "description": "A help message to describe the purpose of the subparser group."
+        },
+        "dest": {
+          "type": "string",
+          "description": "The variable that will be added to the Namespace returned by calling ArgumentParser.parse_args(). This variable will contain the name of the referenced subparser as its value."
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Whether or not a value for the subparser group must be specified."
+        }
+      }
+    },
+    "subparsers": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "test",
+      "items": { "$ref": "#/definitions/parser" }
+    },
+    "arguments": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "test",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [ "mutually_exclusive_group" ],
+            "description": "test",
+            "properties": {
+              "mutually_exclusive_group": {
+                "type": "object",
+                "required": [ "args" ],
+                "description": "test",
+                "properties": {
+                  "args": {
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/argument" }
+                  }
+                }
+              }
+            }
+          },
+          { "$ref": "#/definitions/argument" }
+        ]
+      }
+    }
+  }
+}

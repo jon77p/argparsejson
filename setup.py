@@ -5,7 +5,7 @@ with open("README.md", "r") as fd:
 
 setuptools.setup(
     name="argparsejson",
-    version="0.0.3",
+    version="0.0.4",
     author="Jon Prentice",
     author_email="jon77p@gmail.com",
     description="A library that allows converts JSON into an argparse ArgumentParser",
@@ -14,5 +14,5 @@ setuptools.setup(
     url="https://github.com/jon77p/argparsejson",
     packages=setuptools.find_packages(),
     classifiers=[],
-    install_requires=[]
+    install_requires=["jsonschema"]
 )
