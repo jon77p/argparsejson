@@ -14,5 +14,6 @@ setuptools.setup(
     url="https://github.com/jon77p/argparsejson",
     packages=setuptools.find_packages(),
     classifiers=[],
-    install_requires=["jsonschema"]
+    install_requires=["jsonschema"],
+    include_package_data=True
 )
