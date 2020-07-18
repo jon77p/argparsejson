@@ -1,5 +1,8 @@
 # argparsejson
 ### Easily parse arguments, simply by writing JSON!
+
+[![Build Status](https://travis-ci.com/jon77p/argparsejson.svg?token=FWgq6WkUSedNJi5ECwQa&branch=master)](https://travis-ci.com/jon77p/argparsejson)
+
 ## Getting Started
 1. Copy `example_commands.json` to `commands.json`
 2. Modify as necessary.
