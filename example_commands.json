@@ -69,7 +69,8 @@
               {
                 "name": "--opt2",
                 "help": "second optional param",
-                "action": "store_true"
+                "action": "store_const",
+                "const": true
               }
             ]
           }

@@ -43,7 +43,6 @@
           "description": "test"
         },
         "const": {
-          "type": "string",
           "description": "test"
         },
         "def": {
