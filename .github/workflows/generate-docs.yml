@@ -23,8 +23,10 @@ jobs:
           token: ${{ secrets.GITHUBPAT }}
       - name: Generate the docs
         run: |
-          generate-schema-doc argparsejson/schema.json pip/argparsejson/schema_doc.html --expand-buttons --minify
-          pdoc --html -o pip/argparsejson/docs argparsejson
+          generate-schema-doc argparsejson/schema.json pip/argparsejson/schema/index.html --expand-buttons --minify
+          pdoc --html --force -o pip/argparsejson/docs argparsejson
+          mv pip/argparsejson/docs/argparsejson/* pip/argparsejson/docs
+          rmdir pip/argparsejson/docs/argparsejson
           cd pip
           git config user.name github-actions
           git config user.email github-actions@github.com
