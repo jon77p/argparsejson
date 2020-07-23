@@ -16,6 +16,7 @@ jobs:
           pip install .
           pip install json-schema-for-humans
       - name: Clone PIP Repo
+        uses: actions/checkout@v2
         with:
           repository: jon77p/pypi
           path: pip
