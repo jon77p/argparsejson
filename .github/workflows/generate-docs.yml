@@ -21,7 +21,6 @@ jobs:
           repository: jon77p/pip
           path: pip
       - name: Generate the docs
-        uses: actions/checkout@v2
         run: |
           generate-schema-doc argparsejson/schema.json pip/argparse/schema_doc.html --expand-buttons --minify
           cd pip
