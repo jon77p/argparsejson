@@ -22,8 +22,8 @@ jobs:
           path: pip
       - name: Generate the docs
         run: |
-          generate-schema-doc argparsejson/schema.json "$GITHUB_WORKSPACE/pip/argparse/schema_doc.html" --expand-buttons --minify
-          cd "$GITHUB_WORKSPACE/pip"
+          generate-schema-doc argparsejson/schema.json pip/argparsejson/schema_doc.html --expand-buttons --minify
+          cd pip
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
