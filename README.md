@@ -11,4 +11,6 @@
 3. To get an `argparse` ArgumentParser, call `argparsejson.parse_arguments(<commands_file>)` (adding optional parameters if necessary). Then, call `parse_args()` on the returned ArgumentParser.
 
 ## Documentation
-The fully up-to-date JSON schema can be found [here](https://jon77p.github.io/pypi/argparsejson/schema_doc.html)
+All documentation can be found [here](https://jon77p.github.io/pypi/argparsejson/docs/)
+
+The fully up-to-date JSON schema can be found [here](https://jon77p.github.io/pypi/argparsejson/schema/)
