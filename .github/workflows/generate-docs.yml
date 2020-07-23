@@ -18,7 +18,7 @@ jobs:
       - name: Clone PIP Repo
         uses: actions/checkout@v2
         with:
-          repository: jon77p/pip
+          repository: jon77p/pypi
           path: pip
       - name: Generate the docs
         run: |
