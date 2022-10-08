@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Publish Python Package
-      uses: mariamrf/py-package-publish-action@v1.0.0
+      uses: mariamrf/py-package-publish-action@6f9dbe7625b3eb881550e953f99b28d583add3f9 # tag=v1.1.0
       with:
         python_version: '3.7.0'
       env:
