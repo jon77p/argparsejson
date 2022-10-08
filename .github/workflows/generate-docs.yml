@@ -5,9 +5,9 @@ jobs:
     name: Generating Schema docs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@7884fcad6b5d53d10323aee724dc68d8b9096a2e # tag=v2
       - name: Set up Python 3.7
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@7f80679172b057fc5e90d70d197929d454754a5a # tag=v2
         with:
           python-version: 3.7
       - name: Install Dependencies
@@ -16,7 +16,7 @@ jobs:
           pip install .
           pip install json-schema-for-humans pdoc3
       - name: Clone PIP Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@7884fcad6b5d53d10323aee724dc68d8b9096a2e # tag=v2
         with:
           repository: jon77p/pypi
           path: pip
