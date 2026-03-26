@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@61b9e3751b92087fd0b06925ba6dd6314e06f089 # master
     - name: Publish Python Package
       uses: mariamrf/py-package-publish-action@6f9dbe7625b3eb881550e953f99b28d583add3f9 # tag=v1.1.0
       with:
